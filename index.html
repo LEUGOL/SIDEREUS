@@ -499,9 +499,8 @@ td{font-size:13px;overflow-wrap:anywhere}
  font-weight:bold;
 }
 
-.seat-gap{
- width:9px;
- height:23px;
+.mini-seat-gap{
+ width:8px;
  flex-shrink:0;
 }
 
@@ -1269,8 +1268,6 @@ header{
    <button class="secondary" onclick="closeSeatMap()">닫기</button>
   </div>
 
-  <div class="stage">STAGE</div>
-
   <div class="seat-legend">
    <span><span class="legend-square"></span>선택 가능</span>
    <span><span class="legend-square selected"></span>내 좌석</span>
@@ -1542,44 +1539,34 @@ function render(){
  renderNotes();
 }
 
-/* 좌석 배치 데이터 */
 
-/*
-  1층은 A~O열.
-  한 열 안에서 좌석 번호가 연속되도록 관리한다.
-  실제 세부 배치와 다른 부분은 추후 조정할 수 있도록
-  행별 좌석 수를 이 배열에서 관리한다.
-*/
+/* 좌석 배치 데이터 - 플러스씨어터 실제 배치 */
 
 const floor1Rows=[
- {row:"A",count:19},
- {row:"B",count:19},
- {row:"C",count:18},
- {row:"D",count:19},
- {row:"E",count:18},
- {row:"F",count:19},
- {row:"G",count:18},
- {row:"H",count:19},
- {row:"I",count:18},
- {row:"J",count:19},
- {row:"K",count:18},
- {row:"L",count:19},
- {row:"M",count:18},
- {row:"N",count:18},
- {row:"O",count:17}
+ {row:"A",blocks:[4,11,4]},
+ {row:"B",blocks:[4,11,4]},
+ {row:"C",blocks:[4,11,4]},
+ {row:"D",blocks:[4,11,4]},
+ {row:"E",blocks:[4,11,4]},
+ {row:"F",blocks:[4,11,4]},
+ {row:"G",blocks:[4,11,4]},
+ {row:"H",blocks:[4,11,4]},
+ {row:"I",blocks:[4,11,4]},
+ {row:"J",blocks:[4,11,4]},
+ {row:"K",blocks:[4,11,4]},
+ {row:"L",blocks:[4,11,4]},
+ {row:"M",blocks:[4,0,4]},
+ {row:"N",blocks:[4,0,4]},
+ {row:"O",blocks:[5,0,0]}
 ];
 
-/*
-  SeeYa 플러스씨어터 자료의 2층 열별 좌석 수.
-  P 16석 / Q 16석 / R 14석 / S 14석 / T 14석
-*/
-
+/* 2층은 중앙 블록만 표시 */
 const floor2Rows=[
- {row:"P",count:16},
- {row:"Q",count:16},
- {row:"R",count:14},
- {row:"S",count:14},
- {row:"T",count:14}
+ {row:"P",blocks:[16]},
+ {row:"Q",blocks:[16]},
+ {row:"R",blocks:[14]},
+ {row:"S",blocks:[14]},
+ {row:"T",blocks:[14]}
 ];
 
 function seatId(floor,row,number){
@@ -1589,6 +1576,240 @@ function seatId(floor,row,number){
 function seatDescription(id){
  const [floor,row,number]=id.split("-");
  return `${floor}층 ${row}열 ${number}번`;
+}
+
+/* 좌석 선택 */
+
+let currentRecordIndex=null;
+let temporarySeats=[];
+let currentFloor=1;
+
+function changeFloor(floor){
+ currentFloor=floor;
+
+ document.getElementById("floorTab1")
+  .classList.toggle("active",floor===1);
+
+ document.getElementById("floorTab2")
+  .classList.toggle("active",floor===2);
+
+ document.getElementById("floorPanel1")
+  .classList.toggle("active",floor===1);
+
+ document.getElementById("floorPanel2")
+  .classList.toggle("active",floor===2);
+}
+
+function makeSeat(floor,row,number){
+ const id=seatId(floor,row,number);
+ const selected=temporarySeats.includes(id);
+
+ const button=document.createElement("button");
+ button.type="button";
+ button.className="seat"+(selected?" selected":"");
+ button.textContent=selected?"✓":number;
+ button.title=seatDescription(id);
+
+ button.addEventListener("click",()=>toggleSeat(id));
+
+ return button;
+}
+
+/* 블록 사이 통로 */
+function addSeatGap(row){
+ const gap=document.createElement("span");
+ gap.className="seat-gap";
+ row.appendChild(gap);
+}
+
+/* 실제 좌석 행 생성 */
+function makeSeatRows(floor,rows,targetId){
+ const target=document.getElementById(targetId);
+ target.innerHTML="";
+
+ rows.forEach(item=>{
+  const row=document.createElement("div");
+  row.className="seat-row";
+
+  const label=document.createElement("span");
+  label.className="row-label";
+  label.textContent=item.row;
+  row.appendChild(label);
+
+  let number=1;
+
+  item.blocks.forEach((count,blockIndex)=>{
+   if(count===0)return;
+
+   if(blockIndex>0){
+    addSeatGap(row);
+   }
+
+   for(let i=0;i<count;i++){
+    row.appendChild(makeSeat(floor,item.row,number));
+    number++;
+   }
+  });
+
+  target.appendChild(row);
+ });
+}
+
+function renderSeatMap(){
+ makeSeatRows(1,floor1Rows,"floor1Seats");
+ makeSeatRows(2,floor2Rows,"floor2Seats");
+}
+
+function openSeatMap(index){
+ currentRecordIndex=index;
+ temporarySeats=[...(records[index].seatSelections||[])];
+
+ const r=records[index];
+
+ document.getElementById("seatPerformance").textContent=
+  `${formatDate(r.date)} ${r.time||""}`;
+
+ document.getElementById("seatModal").classList.add("open");
+
+ changeFloor(1);
+ renderSeatMap();
+ updateSelectedSeatText();
+}
+
+function toggleSeat(id){
+ temporarySeats=temporarySeats.includes(id)
+  ?temporarySeats.filter(x=>x!==id)
+  :[...temporarySeats,id];
+
+ saveCurrentSeats();
+ renderSeatMap();
+ updateSelectedSeatText();
+ renderSeatRecords();
+}
+
+function saveCurrentSeats(){
+ if(currentRecordIndex===null)return;
+
+ records[currentRecordIndex].seatSelections=[...temporarySeats];
+
+ records[currentRecordIndex].seat=
+  temporarySeats.map(seatDescription).join(", ");
+
+ save();
+}
+
+function updateSelectedSeatText(){
+ const target=document.getElementById("selectedSeatText");
+
+ target.textContent=temporarySeats.length
+  ?temporarySeats.map(seatDescription).join(" / ")
+  :"선택한 좌석이 없습니다.";
+}
+
+function clearSeats(){
+ temporarySeats=[];
+ saveCurrentSeats();
+ renderSeatMap();
+ updateSelectedSeatText();
+ renderSeatRecords();
+}
+
+function closeSeatMap(){
+ document.getElementById("seatModal").classList.remove("open");
+ currentRecordIndex=null;
+}
+
+/* MY SEATS 집계 */
+
+function renderSeatRecords(){
+ const target=document.getElementById("seatRecordList");
+ target.innerHTML="";
+
+ const seatCounts={};
+
+ records.forEach(r=>{
+  const seats=Array.isArray(r.seatSelections)
+   ?r.seatSelections:[ ];
+
+  seats.forEach(id=>{
+   seatCounts[id]=(seatCounts[id]||0)+1;
+  });
+ });
+
+ if(Object.keys(seatCounts).length===0){
+  const empty=document.createElement("div");
+  empty.className="no-seats";
+  empty.textContent="아직 기록된 좌석이 없습니다.";
+  target.appendChild(empty);
+  return;
+ }
+
+ function makeMiniFloor(floor,rows){
+  const title=document.createElement("div");
+  title.className="mini-floor-title";
+  title.textContent=floor+"층";
+  target.appendChild(title);
+
+  if(floor===1){
+   const stage=document.createElement("div");
+   stage.className="mini-stage";
+   stage.textContent="STAGE";
+   target.appendChild(stage);
+  }
+
+  const map=document.createElement("div");
+  map.className="mini-seat-map";
+
+  rows.forEach(item=>{
+   const row=document.createElement("div");
+   row.className="mini-seat-row";
+
+   const label=document.createElement("span");
+   label.className="mini-row-label";
+   label.textContent=item.row;
+   row.appendChild(label);
+
+   let number=1;
+
+   item.blocks.forEach((count,blockIndex)=>{
+    if(count===0)return;
+
+    if(blockIndex>0){
+     const gap=document.createElement("span");
+     gap.className="mini-seat-gap";
+     row.appendChild(gap);
+    }
+
+    for(let i=0;i<count;i++){
+     const id=seatId(floor,item.row,number);
+     const countValue=seatCounts[id]||0;
+
+     const seat=document.createElement("div");
+     seat.className="mini-seat"+
+      (countValue>0?" selected":"");
+
+     seat.textContent=countValue>0?countValue:"";
+     seat.title=seatDescription(id)+
+      (countValue>0?` · ${countValue}회`:"");
+
+     row.appendChild(seat);
+     number++;
+    }
+   });
+
+   map.appendChild(row);
+  });
+
+  target.appendChild(map);
+ }
+
+ makeMiniFloor(1,floor1Rows);
+ makeMiniFloor(2,floor2Rows);
+
+ const legend=document.createElement("div");
+ legend.className="mini-legend";
+ legend.textContent="숫자는 해당 좌석에 앉은 횟수";
+ target.appendChild(legend);
 }
 
 /* 좌석 선택 */
