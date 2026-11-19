@@ -700,6 +700,419 @@ td{font-size:13px;overflow-wrap:anywhere}
  font-size:13px;
  padding:8px 2px;
 }
+ 
+/* ==================================
+   SIDEREUS · MIDNIGHT BLUE & ANTIQUE GOLD
+   전체 색감 리뉴얼
+================================== */
+
+:root{
+ --navy:#17243B;
+ --ink:#263A56;
+ --silver:#B9C5D3;
+ --mist:#8296AD;
+ --gold:#A88959;
+ --brown:#72563F;
+ --paper:#D8CCB8;
+ --ivory:#E8E5DE;
+
+ --text:#D8DFE8;
+ --line:rgba(185,197,211,.22);
+}
+
+/* 전체 배경 */
+
+body{
+ color:#D8DFE8;
+ background:
+ radial-gradient(
+  ellipse at 50% 0%,
+  rgba(75,96,125,.32),
+  transparent 55%
+ ),
+ linear-gradient(
+  145deg,
+  #111C30,
+  #17243B 55%,
+  #202D43
+ );
+ background-attachment:fixed;
+}
+
+/* 상단 */
+
+header{
+ background:
+ linear-gradient(135deg,#17243B,#263A56);
+ border:1px solid rgba(168,137,89,.55);
+ box-shadow:0 5px 18px rgba(0,0,0,.18);
+}
+
+header .subtitle-ko{
+ color:#C3A675;
+}
+
+/* 각 영역 */
+
+section{
+ background:rgba(34,47,70,.94);
+ border:1px solid rgba(130,150,173,.28);
+ box-shadow:0 4px 14px rgba(0,0,0,.12);
+}
+
+h2{
+ color:#D8CCB8;
+ border-bottom:1px solid rgba(168,137,89,.35);
+ padding-bottom:8px;
+}
+
+/* 배우 카드 */
+
+.cast-card{
+ background:linear-gradient(145deg,#2C405D,#26364F);
+ border:1px solid rgba(130,150,173,.3);
+}
+
+.cast-card h3{
+ color:#D5B77E;
+}
+
+.cast-card p{
+ color:#D0D9E4;
+}
+
+/* 관극 통계 */
+
+.stat{
+ background:linear-gradient(145deg,#2C405D,#26364F);
+ border:1px solid rgba(130,150,173,.28);
+ color:#B9C5D3;
+}
+
+.stat strong{
+ color:#D5B77E;
+}
+
+/* 버튼 */
+
+button{
+ background:#A88959;
+ color:#17243B;
+ font-weight:bold;
+}
+
+button.secondary{
+ background:#344963;
+ color:#D8DFE8;
+ border:1px solid rgba(185,197,211,.28);
+}
+
+button:hover{
+ filter:brightness(1.08);
+}
+
+.actions button{
+ border-color:rgba(168,137,89,.3);
+}
+
+/* 배우 필터 */
+
+#actorFilter{
+ background:#263A56;
+ color:#E0E6ED;
+ border:1px solid rgba(185,197,211,.3);
+}
+
+#actorFilter option{
+ background:#263A56;
+ color:#E0E6ED;
+}
+
+/* 공연 일정표 */
+
+th{
+ background:#344963;
+ color:#D5B77E;
+ border-bottom:1px solid #A88959;
+}
+
+td{
+ color:#D8DFE8;
+ border-bottom:1px solid rgba(185,197,211,.16);
+}
+
+.date-main{
+ color:#D5B77E;
+}
+
+.event-label{
+ color:#C3A675;
+}
+
+.empty-message{
+ color:#AAB8C9;
+}
+
+.watched-check{
+ accent-color:#A88959;
+}
+
+.seat-button{
+ background:#344963;
+ color:#E8E5DE;
+ border:1px solid rgba(168,137,89,.45);
+}
+
+/* 배우별 관극 횟수 */
+
+.actor-count-card{
+ background:#293B55;
+ border:1px solid rgba(130,150,173,.25);
+}
+
+.actor-count-card h3{
+ color:#D5B77E;
+}
+
+.actor-count-person{
+ color:#D8DFE8;
+ border-bottom:1px solid rgba(185,197,211,.18);
+}
+
+.actor-count-number{
+ color:#D5B77E;
+}
+
+/* MY SEATS */
+
+.seat-record{
+ border-bottom:1px solid rgba(168,137,89,.3);
+}
+
+.seat-record-date{
+ color:#D5B77E;
+}
+
+.seat-record-cast{
+ color:#AEBBCD;
+}
+
+.mini-stage{
+ background:#A88959;
+ color:#17243B;
+ font-weight:bold;
+}
+
+.mini-floor-title{
+ color:#D5B77E;
+}
+
+.mini-row-label{
+ color:#AEBBCD;
+}
+
+.mini-seat{
+ background:#263A56;
+ border:1px solid #526985;
+ color:#D8DFE8;
+}
+
+.mini-seat.selected{
+ background:#A88959;
+ border-color:#D0B47C;
+ color:#17243B;
+ font-weight:bold;
+}
+
+.mini-legend,
+.no-seats{
+ color:#AEBBCD;
+}
+
+/* 좌석 선택 모달 */
+
+.seat-modal{
+ background:rgba(5,12,24,.88);
+}
+
+.seat-window{
+ background:#1B2940;
+ border:1px solid rgba(168,137,89,.55);
+ box-shadow:0 12px 40px rgba(0,0,0,.4);
+}
+
+.seat-top h2{
+ color:#D8CCB8;
+}
+
+#seatPerformance{
+ color:#AEBBCD;
+}
+
+.stage{
+ background:linear-gradient(90deg,#72563F,#A88959,#72563F);
+ color:#17243B;
+ font-weight:bold;
+ border:1px solid #C3A675;
+}
+
+/* 좌석 범례 */
+
+.seat-legend{
+ color:#D8DFE8;
+}
+
+.legend-square{
+ background:#263A56;
+ border:1px solid #71869F;
+}
+
+.legend-square.selected{
+ background:#A88959;
+ border-color:#D0B47C;
+}
+
+/* 층 선택 */
+
+.floor-tab{
+ background:#263A56;
+ color:#D8DFE8;
+ border:1px solid #526985;
+}
+
+.floor-tab.active{
+ background:#A88959;
+ color:#17243B;
+ border:1px solid #D0B47C;
+}
+
+/* 실제 좌석 */
+
+.row-label{
+ color:#B9C5D3;
+}
+
+.seat{
+ background:#263A56;
+ color:#D8DFE8;
+ border:1px solid #60758F;
+}
+
+.seat.selected{
+ background:#A88959;
+ border-color:#D9BC83;
+ color:#17243B;
+ font-weight:bold;
+ box-shadow:0 0 7px rgba(168,137,89,.35);
+}
+
+.seat-gap{
+ background:transparent;
+}
+
+.seat-bottom{
+ border-top:1px solid rgba(168,137,89,.4);
+}
+
+.seat-bottom p{
+ color:#D5B77E;
+}
+
+#selectedSeatText{
+ color:#E0C58F;
+}
+
+/* MY NOTES */
+
+.notes-intro{
+ color:#AEBBCD;
+}
+
+.notes-editor{
+ background:#263A56;
+ border:1px solid rgba(168,137,89,.4);
+}
+
+.notes-editor label{
+ color:#D5B77E;
+}
+
+.notes-editor select,
+.notes-editor textarea{
+ background:#1B2940;
+ color:#E0E6ED;
+ border:1px solid #526985;
+}
+
+.notes-editor select option{
+ background:#1B2940;
+ color:#E0E6ED;
+}
+
+.notes-editor textarea::placeholder{
+ color:#8495AA;
+}
+
+.notes-editor textarea:focus,
+.notes-editor select:focus{
+ outline:2px solid #A88959;
+}
+
+.rating-star{
+ color:#71839A;
+}
+
+.rating-star.selected{
+ color:#D0AC69;
+}
+
+.notes-save{
+ background:#A88959;
+ color:#17243B;
+}
+
+.note-card{
+ background:#263A56;
+ border:1px solid rgba(130,150,173,.3);
+}
+
+.note-date,
+.note-cast{
+ color:#AEBBCD;
+}
+
+.note-title{
+ color:#D5B77E;
+}
+
+.note-label{
+ color:#D0AC69;
+}
+
+.note-content{
+ color:#D8DFE8;
+}
+
+.note-empty{
+ color:#AEBBCD;
+}
+
+/* 모바일에서도 동일한 색감 유지 */
+
+@media(max-width:600px){
+ .seat-window{
+  background:#1B2940;
+ }
+
+ .seat{
+  background:#263A56;
+ }
+
+ .seat.selected{
+  background:#A88959;
+ }
+}
+
 </style>
 </head>
 
