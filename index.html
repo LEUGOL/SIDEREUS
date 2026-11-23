@@ -318,7 +318,26 @@ td{font-size:13px;overflow-wrap:anywhere}
  gap:2px;
  min-height:14px;
 }
+.mini-seat-block{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:2px;
+ flex-shrink:0;
+}
 
+.mini-seat-block.left-block,
+.mini-seat-block.right-block{
+ width:50px;
+}
+
+.mini-seat-block.center-block{
+ width:141px;
+}
+
+.mini-seat-block.left-block{
+ justify-content:flex-end;
+}
 .mini-row-label{
  width:15px;
  text-align:center;
@@ -487,6 +506,27 @@ td{font-size:13px;overflow-wrap:anywhere}
  justify-content:center;
  gap:2px;
  min-height:25px;
+}
+
+.seat-block{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:2px;
+ flex-shrink:0;
+}
+
+.seat-block.left-block,
+.seat-block.right-block{
+ width:94px;
+}
+
+.seat-block.center-block{
+ width:262px;
+}
+
+.seat-block.left-block{
+ justify-content:flex-end;
 }
 
 .row-label{
@@ -706,6 +746,18 @@ td{font-size:13px;overflow-wrap:anywhere}
  .seat-map{gap:3px}
   .floor-heading{font-size:12px;padding:6px 0}
  .seat-row{gap:1px;min-height:17px}
+ .seat-block{
+ gap:1px;
+}
+
+.seat-block.left-block,
+.seat-block.right-block{
+ width:63px;
+}
+
+.seat-block.center-block{
+ width:175px;
+}
  .row-label{width:14px;font-size:8px}
  .seat{width:15px;min-width:15px;height:16px;font-size:7px;line-height:14px;border-radius:2px}
  .seat-gap{width:5px;height:16px}
@@ -715,6 +767,18 @@ td{font-size:13px;overflow-wrap:anywhere}
  .mini-seat-row{gap:1px}
  .mini-seat{width:9px;min-width:9px;height:11px;font-size:6px}
  .mini-row-label{width:12px}
+ .mini-seat-block{
+ gap:1px;
+}
+
+.mini-seat-block.left-block,
+.mini-seat-block.right-block{
+ width:39px;
+}
+
+.mini-seat-block.center-block{
+ width:109px;
+}
  .notes-editor{padding:9px}
 }
 
@@ -1649,7 +1713,11 @@ function makeSeatRows(floor,rows,targetId){
  rows.forEach(item=>{
   const row=document.createElement("div");
   row.className="seat-row";
-  row.style.marginLeft=(item.offset||0)+"px";
+
+  // 세 블록 좌석은 행 전체 위치를 이동시키지 않음
+  if(item.blocks.length!==3){
+   row.style.marginLeft=(item.offset||0)+"px";
+  }
 
   const label=document.createElement("span");
   label.className="row-label";
@@ -1658,18 +1726,46 @@ function makeSeatRows(floor,rows,targetId){
 
   let number=1;
 
-  item.blocks.forEach((count,blockIndex)=>{
-   if(count===0)return;
+  if(item.blocks.length===3){
 
-   if(blockIndex>0){
-    addSeatGap(row);
-   }
+   const blockNames=[
+    "left-block",
+    "center-block",
+    "right-block"
+   ];
 
-   for(let i=0;i<count;i++){
-    row.appendChild(makeSeat(floor,item.row,number));
-    number++;
-   }
-  });
+   item.blocks.forEach((count,blockIndex)=>{
+    if(blockIndex>0){
+     addSeatGap(row);
+    }
+
+    const block=document.createElement("div");
+    block.className="seat-block "+blockNames[blockIndex];
+
+    for(let i=0;i<count;i++){
+     block.appendChild(makeSeat(floor,item.row,number));
+     number++;
+    }
+
+    row.appendChild(block);
+   });
+
+  }else{
+
+   item.blocks.forEach((count,blockIndex)=>{
+    if(count===0)return;
+
+    if(blockIndex>0){
+     addSeatGap(row);
+    }
+
+    for(let i=0;i<count;i++){
+     row.appendChild(makeSeat(floor,item.row,number));
+     number++;
+    }
+   });
+
+  }
 
   target.appendChild(row);
  });
@@ -1753,32 +1849,71 @@ function renderSeatRecords(){
   });
  });
 
- function makeMiniFloor(floor,rows){
-  const title=document.createElement("div");
-  title.className="mini-floor-title";
-  title.textContent=floor+"층";
-  target.appendChild(title);
+function makeMiniFloor(floor,rows){
+ const title=document.createElement("div");
+ title.className="mini-floor-title";
+ title.textContent=floor+"층";
+ target.appendChild(title);
 
-  if(floor===1){
-   const stage=document.createElement("div");
-   stage.className="mini-stage";
-   stage.textContent="STAGE";
-   target.appendChild(stage);
-  }
+ if(floor===1){
+  const stage=document.createElement("div");
+  stage.className="mini-stage";
+  stage.textContent="STAGE";
+  target.appendChild(stage);
+ }
 
-  const map=document.createElement("div");
-  map.className="mini-seat-map";
+ const map=document.createElement("div");
+ map.className="mini-seat-map";
 
-  rows.forEach(item=>{
-   const row=document.createElement("div");
-   row.className="mini-seat-row";
+ rows.forEach(item=>{
+  const row=document.createElement("div");
+  row.className="mini-seat-row";
 
-   const label=document.createElement("span");
-   label.className="mini-row-label";
-   label.textContent=item.row;
-   row.appendChild(label);
+  const label=document.createElement("span");
+  label.className="mini-row-label";
+  label.textContent=item.row;
+  row.appendChild(label);
 
-   let number=1;
+  let number=1;
+
+  if(item.blocks.length===3){
+
+   const blockNames=[
+    "left-block",
+    "center-block",
+    "right-block"
+   ];
+
+   item.blocks.forEach((count,blockIndex)=>{
+    if(blockIndex>0){
+     const gap=document.createElement("span");
+     gap.className="mini-seat-gap";
+     row.appendChild(gap);
+    }
+
+    const block=document.createElement("div");
+    block.className="mini-seat-block "+blockNames[blockIndex];
+
+    for(let i=0;i<count;i++){
+     const id=seatId(floor,item.row,number);
+     const countValue=seatCounts[id]||0;
+
+     const seat=document.createElement("div");
+     seat.className="mini-seat"+
+      (countValue>0?" selected":"");
+
+     seat.textContent=countValue>0?countValue:"";
+     seat.title=seatDescription(id)+
+      (countValue>0?` · ${countValue}회`:"");
+
+     block.appendChild(seat);
+     number++;
+    }
+
+    row.appendChild(block);
+   });
+
+  }else{
 
    item.blocks.forEach((count,blockIndex)=>{
     if(count===0)return;
@@ -1806,11 +1941,13 @@ function renderSeatRecords(){
     }
    });
 
-   map.appendChild(row);
-  });
+  }
 
-  target.appendChild(map);
- }
+  map.appendChild(row);
+ });
+
+ target.appendChild(map);
+}
 
  makeMiniFloor(1,floor1Rows);
  makeMiniFloor(2,floor2Rows);
