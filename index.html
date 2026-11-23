@@ -1289,21 +1289,17 @@ header{
    <span><span class="legend-square selected"></span>내 좌석</span>
   </div>
 
-  <div class="floor-tabs">
-   <button class="floor-tab active" id="floorTab1" onclick="changeFloor(1)">1층</button>
-   <button class="floor-tab" id="floorTab2" onclick="changeFloor(2)">2층</button>
+  <div class="stage">STAGE</div>
+
+  <div class="floor-section">
+   <div class="floor-heading">1층</div>
+   <div class="seat-map" id="floor1Seats"></div>
   </div>
 
-<div class="floor-panel active" id="floorPanel1">
- <div class="stage">STAGE</div>
- <div class="mini-floor-title">1층 객석</div>
- <div class="seat-map" id="floor1Seats"></div>
-</div>
-
-<div class="floor-panel" id="floorPanel2">
- <div class="mini-floor-title">2층 객석</div>
- <div class="seat-map" id="floor2Seats"></div>
-</div>
+  <div class="floor-section">
+   <div class="floor-heading">2층</div>
+   <div class="seat-map" id="floor2Seats"></div>
+  </div>
 
   <div class="seat-bottom">
    <p>선택한 좌석</p>
