@@ -1734,6 +1734,9 @@ function makeSeatRows(floor,rows,targetId){
 
     const block=document.createElement("div");
     block.className="seat-block "+blockNames[blockIndex];
+   if(item.row==="O" && blockIndex===0){
+ block.classList.add("o-row-block");
+}
 
 if(
  (item.row==="M"||item.row==="N")
