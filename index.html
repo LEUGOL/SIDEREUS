@@ -1664,7 +1664,7 @@ const floor1Rows=[
  {row:"L",blocks:[2,11,4]},
  {row:"M",blocks:[2,2,0]},
  {row:"N",blocks:[2,2,0]},
- {row:"O",blocks:[4]}
+ {row:"O",blocks:[5]}
 ];
 
 /* 2층 좌석 배치 */
@@ -1723,9 +1723,11 @@ function makeSeatRows(floor,rows,targetId){
   row.className="seat-row";
 
   // 세 블록 좌석은 행 전체 위치를 이동시키지 않음
-  if(item.blocks.length!==3){
-   row.style.marginLeft=(item.offset||0)+"px";
-  }
+ if(item.row==="O"){
+ row.style.marginLeft="-166px";
+}else if(item.blocks.length!==3){
+ row.style.marginLeft=(item.offset||0)+"px";
+}
 
   const label=document.createElement("span");
   label.className="row-label";
