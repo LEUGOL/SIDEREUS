@@ -1758,14 +1758,6 @@ function renderSeatRecords(){
   });
  });
 
- if(Object.keys(seatCounts).length===0){
-  const empty=document.createElement("div");
-  empty.className="no-seats";
-  empty.textContent="아직 기록된 좌석이 없습니다.";
-  target.appendChild(empty);
-  return;
- }
-
  function makeMiniFloor(floor,rows){
   const title=document.createElement("div");
   title.className="mini-floor-title";
