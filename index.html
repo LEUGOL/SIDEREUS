@@ -1226,6 +1226,29 @@ header{
   justify-content:flex-start;
   margin:12px 0 18px;
 }
+ /* N열과 O열 첫 좌석 시작 위치 맞추기 */
+
+.seat-block.left-block.same-start-block{
+ justify-content:flex-start;
+ padding-left:48px;
+}
+
+.mini-seat-block.left-block.same-start-block{
+ justify-content:flex-start;
+ padding-left:26px;
+}
+
+@media(max-width:600px){
+
+ .seat-block.left-block.same-start-block{
+  padding-left:32px;
+ }
+
+ .mini-seat-block.left-block.same-start-block{
+  padding-left:20px;
+ }
+
+}
 </style>
 </head>
 
@@ -1893,11 +1916,8 @@ function makeMiniFloor(floor,rows){
     const block=document.createElement("div");
     block.className="mini-seat-block "+blockNames[blockIndex];
 
-if(
- (item.row==="M"||item.row==="N")
- &&blockIndex===1
-){
- block.style.justifyContent="flex-start";
+if(item.row==="O" && blockIndex===0){
+ block.classList.add("same-start-block");
 }
 
     for(let i=0;i<count;i++){
