@@ -1722,10 +1722,8 @@ function makeSeatRows(floor,rows,targetId){
   const row=document.createElement("div");
   row.className="seat-row";
 
-  // 세 블록 좌석은 행 전체 위치를 이동시키지 않음
- if(item.row==="O"){
- row.style.marginLeft="-166px";
-}else if(item.blocks.length!==3){
+// 세 블록 좌석은 행 전체 위치를 이동시키지 않음
+if(item.row!=="O" && item.blocks.length!==3){
  row.style.marginLeft=(item.offset||0)+"px";
 }
 
@@ -1765,6 +1763,13 @@ if((item.row==="M"||item.row==="N")&&blockIndex===1){
    });
 
   }else{
+
+   if(item.row==="O"){
+    const spacer=document.createElement("span");
+    spacer.style.width="126px";
+    spacer.style.flexShrink="0";
+    row.appendChild(spacer);
+   }
 
    item.blocks.forEach((count,blockIndex)=>{
     if(count===0)return;
