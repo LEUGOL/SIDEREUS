@@ -524,7 +524,9 @@ td{font-size:13px;overflow-wrap:anywhere}
 .seat-block.center-block{
  width:262px;
 }
-
+.seat-block.center-block.left-align-block{
+ justify-content:flex-start;
+}
 .seat-block.left-block{
  justify-content:flex-end;
 }
@@ -778,6 +780,9 @@ td{font-size:13px;overflow-wrap:anywhere}
 
 .mini-seat-block.center-block{
  width:109px;
+}
+ .mini-seat-block.center-block.left-align-block{
+ justify-content:flex-start;
 }
  .notes-editor{padding:9px}
 }
@@ -1654,8 +1659,8 @@ const floor1Rows=[
  {row:"J",blocks:[4,11,4]},
  {row:"K",blocks:[4,10,4]},
  {row:"L",blocks:[2,11,4]},
- {row:"M",blocks:[4,11,4]},
- {row:"N",blocks:[4,11,4]},
+ {row:"M",blocks:[2,2,0]},
+ {row:"N",blocks:[2,2,0]},
  {row:"O",blocks:[4]}
 ];
 
@@ -1741,6 +1746,10 @@ function makeSeatRows(floor,rows,targetId){
 
     const block=document.createElement("div");
     block.className="seat-block "+blockNames[blockIndex];
+
+if((item.row==="M"||item.row==="N")&&blockIndex===1){
+ block.classList.add("left-align-block");
+}
 
     for(let i=0;i<count;i++){
      block.appendChild(makeSeat(floor,item.row,number));
@@ -1893,6 +1902,10 @@ function makeMiniFloor(floor,rows){
 
     const block=document.createElement("div");
     block.className="mini-seat-block "+blockNames[blockIndex];
+
+if((item.row==="M"||item.row==="N")&&blockIndex===1){
+ block.classList.add("left-align-block");
+}
 
     for(let i=0;i<count;i++){
      const id=seatId(floor,item.row,number);
