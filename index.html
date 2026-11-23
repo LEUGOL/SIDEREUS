@@ -1753,7 +1753,7 @@ function makeSeatRows(floor,rows,targetId){
     block.className="seat-block "+blockNames[blockIndex];
 
 if((item.row==="M"||item.row==="N")&&blockIndex===1){
- block.classList.add("left-align-block");
+ block.style.justifyContent="flex-start";
 }
 
     for(let i=0;i<count;i++){
@@ -1909,7 +1909,7 @@ function makeMiniFloor(floor,rows){
     block.className="mini-seat-block "+blockNames[blockIndex];
 
 if((item.row==="M"||item.row==="N")&&blockIndex===1){
- block.classList.add("left-align-block");
+ block.style.justifyContent="flex-start";
 }
 
     for(let i=0;i<count;i++){
