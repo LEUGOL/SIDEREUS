@@ -1243,6 +1243,12 @@ header{
 <section>
  <h2>MY SEATS</h2>
  <div id="seatRecordList" class="seat-record-list"></div>
+
+ <button class="secondary"
+  style="margin-top:12px;width:100%;"
+  onclick="openSeatPreview()">
+  좌석표 미리보기
+ </button>
 </section>
 
 <section>
@@ -1694,7 +1700,20 @@ function openSeatMap(index){
  renderSeatMap();
  updateSelectedSeatText();
 }
+/* 공연 일정 등록 전 좌석표 미리보기 */
 
+function openSeatPreview(){
+ currentRecordIndex=null;
+ temporarySeats=[];
+
+ document.getElementById("seatPerformance").textContent=
+  "좌석 배치 미리보기 · 공연 기록 전";
+
+ document.getElementById("seatModal").classList.add("open");
+
+ renderSeatMap();
+ updateSelectedSeatText();
+}
 function toggleSeat(id){
  temporarySeats=temporarySeats.includes(id)
   ?temporarySeats.filter(x=>x!==id)
@@ -1765,62 +1784,6 @@ function renderSeatRecords(){
    stage.textContent="STAGE";
    target.appendChild(stage);
   }
-
-  const map=document.createElement("div");
-  map.className="mini-seat-map";
-
-  rows.forEach(item=>{
-   const row=document.createElement("div");
-   row.className="mini-seat-row";
-   row.style.marginLeft=((item.offset||0)*0.5)+"px";
-
-   const label=document.createElement("span");
-   label.className="mini-row-label";
-   label.textContent=item.row;
-   row.appendChild(label);
-
-   let number=1;
-
-   item.blocks.forEach((count,blockIndex)=>{
-    if(count===0)return;
-
-    if(blockIndex>0){
-     const gap=document.createElement("span");
-     gap.className="mini-seat-gap";
-     row.appendChild(gap);
-    }
-
-    for(let i=0;i<count;i++){
-     const id=seatId(floor,item.row,number);
-     const countValue=seatCounts[id]||0;
-
-     const seat=document.createElement("div");
-     seat.className="mini-seat"+(countValue>0?" selected":"");
-     seat.textContent=countValue>0?countValue:"";
-     seat.title=seatDescription(id)+(countValue>0?` · ${countValue}회`:"");
-
-     row.appendChild(seat);
-     number++;
-    }
-   });
-
-   map.appendChild(row);
-  });
-
-  target.appendChild(map);
- }
-
- makeMiniFloor(1,floor1Rows);
- makeMiniFloor(2,floor2Rows);
-
- const legend=document.createElement("div");
- legend.className="mini-seat-legend";
- legend.innerHTML=
-  '<span><i class="mini-seat"></i> 미선택</span>'+
-  '<span><i class="mini-seat selected"></i> 관극 좌석</span>';
-
- target.appendChild(legend);
-}
 
   const map=document.createElement("div");
   map.className="mini-seat-map";
