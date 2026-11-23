@@ -1139,6 +1139,12 @@ header{
 .note-card{
  background:rgba(38,58,86,.58) !important;
 }
+ /* 기록 백업 버튼 - 페이지 좌측 하단 */
+
+.backup-actions{
+  justify-content:flex-start;
+  margin:12px 0 18px;
+}
 </style>
 </head>
 
@@ -1190,12 +1196,6 @@ header{
 
 <section>
  <h2>PERFORMANCE SCHEDULE</h2>
-
- <div class="actions">
-  <button class="secondary" onclick="exportData()">기록 저장</button>
-  <button class="secondary" onclick="document.getElementById('importFile').click()">기록 불러오기</button>
-  <input id="importFile" type="file" accept=".json" hidden onchange="importData(event)">
- </div>
 
  <select id="actorFilter" onchange="render()">
   <option value="">전체 배우 보기</option>
@@ -1257,6 +1257,18 @@ header{
  <div id="noteList" class="notes-list"></div>
 </section>
 
+ <div class="actions backup-actions">
+  <button class="secondary" onclick="document.getElementById('importFile').click()">
+    기록 불러오기
+  </button>
+
+  <button class="secondary" onclick="exportData()">
+    기록 저장
+  </button>
+
+  <input id="importFile" type="file" accept=".json" hidden onchange="importData(event)">
+</div>
+ 
 </div>
 
 <!-- 좌석 선택 창 -->
