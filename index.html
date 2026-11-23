@@ -1761,13 +1761,6 @@ function makeSeatRows(floor,rows,targetId){
  block.classList.add("o-row-block");
 }
 
-if(
- (item.row==="M"||item.row==="N")
- &&blockIndex===1
-){
- block.style.justifyContent="flex-start";
-}
-
     for(let i=0;i<count;i++){
      block.appendChild(makeSeat(floor,item.row,number));
      number++;
