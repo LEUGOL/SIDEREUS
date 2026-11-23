@@ -460,7 +460,27 @@ td{font-size:13px;overflow-wrap:anywhere}
  overflow-x:auto;
  padding:8px 2px;
 }
+/* 1층 · 2층 구분 */
 
+.floor-section{
+ width:100%;
+ margin-top:14px;
+}
+
+.floor-heading{
+ text-align:center;
+ color:#D5B77E;
+ font-size:13px;
+ font-weight:bold;
+ letter-spacing:2px;
+ padding:8px 0;
+ margin-bottom:5px;
+ border-bottom:1px solid rgba(168,137,89,.35);
+}
+
+.floor-section + .floor-section{
+ margin-top:20px;
+}
 .seat-row{
  display:flex;
  align-items:center;
@@ -684,6 +704,7 @@ td{font-size:13px;overflow-wrap:anywhere}
  .seat-legend{gap:7px;font-size:10px;margin-bottom:8px}
  .legend-square{width:12px;height:12px}
  .seat-map{gap:3px}
+  .floor-heading{font-size:12px;padding:6px 0}
  .seat-row{gap:1px;min-height:17px}
  .row-label{width:14px;font-size:8px}
  .seat{width:15px;min-width:15px;height:16px;font-size:7px;line-height:14px;border-radius:2px}
@@ -1602,22 +1623,6 @@ let currentRecordIndex=null;
 let temporarySeats=[];
 let currentFloor=1;
 
-function changeFloor(floor){
- currentFloor=floor;
-
- document.getElementById("floorTab1")
-  .classList.toggle("active",floor===1);
-
- document.getElementById("floorTab2")
-  .classList.toggle("active",floor===2);
-
- document.getElementById("floorPanel1")
-  .classList.toggle("active",floor===1);
-
- document.getElementById("floorPanel2")
-  .classList.toggle("active",floor===2);
-}
-
 function makeSeat(floor,row,number){
  const id=seatId(floor,row,number);
  const selected=temporarySeats.includes(id);
@@ -1689,7 +1694,6 @@ function openSeatMap(index){
 
  document.getElementById("seatModal").classList.add("open");
 
- changeFloor(1);
  renderSeatMap();
  updateSelectedSeatText();
 }
