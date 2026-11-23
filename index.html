@@ -1243,12 +1243,6 @@ header{
 <section>
  <h2>MY SEATS</h2>
  <div id="seatRecordList" class="seat-record-list"></div>
-
- <button class="secondary"
-  style="margin-top:12px;width:100%;"
-  onclick="openSeatPreview()">
-  좌석표 미리보기
- </button>
 </section>
 
 <section>
@@ -1700,20 +1694,7 @@ function openSeatMap(index){
  renderSeatMap();
  updateSelectedSeatText();
 }
-/* 공연 일정 등록 전 좌석표 미리보기 */
 
-function openSeatPreview(){
- currentRecordIndex=null;
- temporarySeats=[];
-
- document.getElementById("seatPerformance").textContent=
-  "좌석 배치 미리보기 · 공연 기록 전";
-
- document.getElementById("seatModal").classList.add("open");
-
- renderSeatMap();
- updateSelectedSeatText();
-}
 function toggleSeat(id){
  temporarySeats=temporarySeats.includes(id)
   ?temporarySeats.filter(x=>x!==id)
