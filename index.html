@@ -1294,12 +1294,14 @@ header{
    <button class="floor-tab" id="floorTab2" onclick="changeFloor(2)">2층</button>
   </div>
 
- <div class="floor-panel active" id="floorPanel1">
+<div class="floor-panel active" id="floorPanel1">
  <div class="stage">STAGE</div>
+ <div class="mini-floor-title">1층 객석</div>
  <div class="seat-map" id="floor1Seats"></div>
 </div>
 
 <div class="floor-panel" id="floorPanel2">
+ <div class="mini-floor-title">2층 객석</div>
  <div class="seat-map" id="floor2Seats"></div>
 </div>
 
@@ -1559,6 +1561,8 @@ function render(){
 
 /* 좌석 배치 데이터 - 플러스씨어터 실제 배치 */
 
+/* 좌석 배치 데이터 - 플러스씨어터 */
+
 const floor1Rows=[
  {row:"A",blocks:[4,11,4]},
  {row:"B",blocks:[4,11,4]},
@@ -1572,12 +1576,13 @@ const floor1Rows=[
  {row:"J",blocks:[4,11,4]},
  {row:"K",blocks:[4,11,4]},
  {row:"L",blocks:[4,11,4]},
- {row:"M",blocks:[4,0,4]},
- {row:"N",blocks:[4,0,4]},
- {row:"O",blocks:[5,0,0]}
+ {row:"M",blocks:[4,11,4]},
+ {row:"N",blocks:[4,11,4]},
+ {row:"O",blocks:[4]}
 ];
 
-/* 2층은 중앙 블록만 표시 */
+/* 2층 */
+
 const floor2Rows=[
  {row:"P",blocks:[16]},
  {row:"Q",blocks:[16]},
