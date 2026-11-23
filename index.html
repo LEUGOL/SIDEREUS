@@ -1576,36 +1576,32 @@ function render(){
 }
 
 
-/* 좌석 배치 데이터 - 플러스씨어터 실제 배치 */
-
-/* 좌석 배치 데이터 - 플러스씨어터 */
-
+/* 1층 좌석 배치 - 1차 테스트 */
 const floor1Rows=[
- {row:"A",blocks:[4,11,4]},
- {row:"B",blocks:[4,11,4]},
- {row:"C",blocks:[4,11,4]},
- {row:"D",blocks:[4,11,4]},
- {row:"E",blocks:[4,11,4]},
- {row:"F",blocks:[4,11,4]},
- {row:"G",blocks:[4,11,4]},
- {row:"H",blocks:[4,11,4]},
- {row:"I",blocks:[4,11,4]},
- {row:"J",blocks:[4,11,4]},
- {row:"K",blocks:[4,11,4]},
- {row:"L",blocks:[4,11,4]},
- {row:"M",blocks:[4,11,4]},
- {row:"N",blocks:[4,11,4]},
- {row:"O",blocks:[4]}
+ {row:"A",blocks:[4,11,4],offset:0},
+ {row:"B",blocks:[4,11,4],offset:7},
+ {row:"C",blocks:[4,11,4],offset:0},
+ {row:"D",blocks:[4,11,4],offset:7},
+ {row:"E",blocks:[4,11,4],offset:0},
+ {row:"F",blocks:[4,11,4],offset:7},
+ {row:"G",blocks:[4,11,4],offset:0},
+ {row:"H",blocks:[4,11,4],offset:7},
+ {row:"I",blocks:[4,11,4],offset:0},
+ {row:"J",blocks:[4,11,4],offset:7},
+ {row:"K",blocks:[4,11,4],offset:0},
+ {row:"L",blocks:[4,11,4],offset:7},
+ {row:"M",blocks:[4,11,4],offset:0},
+ {row:"N",blocks:[4,11,4],offset:7},
+ {row:"O",blocks:[4],offset:0}
 ];
 
-/* 2층 */
-
+/* 2층 좌석 배치 */
 const floor2Rows=[
- {row:"P",blocks:[16]},
- {row:"Q",blocks:[16]},
- {row:"R",blocks:[14]},
- {row:"S",blocks:[14]},
- {row:"T",blocks:[14]}
+ {row:"P",blocks:[16],offset:0},
+ {row:"Q",blocks:[16],offset:7},
+ {row:"R",blocks:[14],offset:0},
+ {row:"S",blocks:[14],offset:7},
+ {row:"T",blocks:[14],offset:0}
 ];
 
 function seatId(floor,row,number){
@@ -1653,6 +1649,7 @@ function makeSeatRows(floor,rows,targetId){
  rows.forEach(item=>{
   const row=document.createElement("div");
   row.className="seat-row";
+  row.style.marginLeft=(item.offset||0)+"px";
 
   const label=document.createElement("span");
   label.className="row-label";
@@ -1750,9 +1747,7 @@ function renderSeatRecords(){
  const seatCounts={};
 
  records.forEach(r=>{
-  const seats=Array.isArray(r.seatSelections)
-   ?r.seatSelections:[ ];
-
+  const seats=Array.isArray(r.seatSelections)?r.seatSelections:[];
   seats.forEach(id=>{
    seatCounts[id]=(seatCounts[id]||0)+1;
   });
@@ -1770,6 +1765,62 @@ function renderSeatRecords(){
    stage.textContent="STAGE";
    target.appendChild(stage);
   }
+
+  const map=document.createElement("div");
+  map.className="mini-seat-map";
+
+  rows.forEach(item=>{
+   const row=document.createElement("div");
+   row.className="mini-seat-row";
+   row.style.marginLeft=((item.offset||0)*0.5)+"px";
+
+   const label=document.createElement("span");
+   label.className="mini-row-label";
+   label.textContent=item.row;
+   row.appendChild(label);
+
+   let number=1;
+
+   item.blocks.forEach((count,blockIndex)=>{
+    if(count===0)return;
+
+    if(blockIndex>0){
+     const gap=document.createElement("span");
+     gap.className="mini-seat-gap";
+     row.appendChild(gap);
+    }
+
+    for(let i=0;i<count;i++){
+     const id=seatId(floor,item.row,number);
+     const countValue=seatCounts[id]||0;
+
+     const seat=document.createElement("div");
+     seat.className="mini-seat"+(countValue>0?" selected":"");
+     seat.textContent=countValue>0?countValue:"";
+     seat.title=seatDescription(id)+(countValue>0?` · ${countValue}회`:"");
+
+     row.appendChild(seat);
+     number++;
+    }
+   });
+
+   map.appendChild(row);
+  });
+
+  target.appendChild(map);
+ }
+
+ makeMiniFloor(1,floor1Rows);
+ makeMiniFloor(2,floor2Rows);
+
+ const legend=document.createElement("div");
+ legend.className="mini-seat-legend";
+ legend.innerHTML=
+  '<span><i class="mini-seat"></i> 미선택</span>'+
+  '<span><i class="mini-seat selected"></i> 관극 좌석</span>';
+
+ target.appendChild(legend);
+}
 
   const map=document.createElement("div");
   map.className="mini-seat-map";
